@@ -226,31 +226,32 @@ void sparselu_par_call(float **BENCH)
       lu0(BENCH[kk*bots_arg_size+kk]);
       for (jj=kk+1; jj<bots_arg_size; jj++)
          if (BENCH[kk*bots_arg_size+jj] != NULL)
-            #pragma omp task untied firstprivate(kk, jj) shared(BENCH)
+            #pragma omp task untied depend(in:BENCH[kk*bots_arg_size+kk]) depend(inout:BENCH[kk*bots_arg_size+jj])
          {
             fwd(BENCH[kk*bots_arg_size+kk], BENCH[kk*bots_arg_size+jj]);
          }
       for (ii=kk+1; ii<bots_arg_size; ii++) 
          if (BENCH[ii*bots_arg_size+kk] != NULL)
-            #pragma omp task untied firstprivate(kk, ii) shared(BENCH)
+            #pragma omp task untied depend(in:BENCH[kk*bots_arg_size+kk]) depend(inout:BENCH[ii*bots_arg_size+kk])
          {
             bdiv (BENCH[kk*bots_arg_size+kk], BENCH[ii*bots_arg_size+kk]);
          }
 
-      #pragma omp taskwait
 
       for (ii=kk+1; ii<bots_arg_size; ii++)
          if (BENCH[ii*bots_arg_size+kk] != NULL)
             for (jj=kk+1; jj<bots_arg_size; jj++)
                if (BENCH[kk*bots_arg_size+jj] != NULL)
-               #pragma omp task untied firstprivate(kk, jj, ii) shared(BENCH)
                {
                      if (BENCH[ii*bots_arg_size+jj]==NULL) BENCH[ii*bots_arg_size+jj] = allocate_clean_block();
+               #pragma omp task untied depend(in:BENCH[ii*bots_arg_size+kk]) depend(in:BENCH[kk*bots_arg_size+jj]) \
+		  depend(inout:BENCH[ii*bots_arg_size+jj])
+		  {
                      bmod(BENCH[ii*bots_arg_size+kk], BENCH[kk*bots_arg_size+jj], BENCH[ii*bots_arg_size+jj]);
+		  }
                }
-
-      #pragma omp taskwait
    }
+  #pragma omp taskwait
    bots_message(" completed!\n");
 }
 
