@@ -99,12 +99,14 @@ long long fib (int n)
 	long long x, y;
 	if (n < 2) return n;
 
-	#pragma omp task untied shared(x) firstprivate(n)
-	x = fib(n - 1);
-	#pragma omp task untied shared(y) firstprivate(n)
-	y = fib(n - 2);
+  #pragma omp taskgroup
+  {
+    #pragma omp task untied shared(x) firstprivate(n) depend(in:n) depend(out:x)
+    x = fib(n - 1);
+    #pragma omp task untied shared(y) firstprivate(n) depend(in:n) depend(out:y)
+    y = fib(n - 2);
+  }
 
-	#pragma omp taskwait
 	return x + y;
 }
 
