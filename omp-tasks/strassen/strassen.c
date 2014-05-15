@@ -1130,31 +1130,38 @@ void OptimizedStrassenMultiply_par(REAL *C, REAL *A, REAL *B, unsigned MatrixSiz
   #pragma omp taskgroup
   {
     /* M2 = A11 x B11 */
-    #pragma omp task untied depend(inout:M2) depend(in:A11, B11)
+    #pragma omp task untied depend(inout:M2[:QuadrantSize*QuadrantSize]) \
+      depend(in:A11[:QuadrantSize*QuadrantSize], B11[:QuadrantSize*QuadrantSize])
     OptimizedStrassenMultiply_par(M2, A11, B11, QuadrantSize, QuadrantSize, RowWidthA, RowWidthB, Depth+1);
 
     /* M5 = S1 * S5 */
-    #pragma omp task untied depend(inout: M5) depend(inout: S1, S5)
+    #pragma omp task untied depend(inout: M5[:QuadrantSize*QuadrantSize]) \
+      depend(inout: S1[:QuadrantSize*QuadrantSize], S5[:QuadrantSize*QuadrantSize])
     OptimizedStrassenMultiply_par(M5, S1, S5, QuadrantSize, QuadrantSize, QuadrantSize, QuadrantSize, Depth+1);
 
     /* Step 1 of T1 = S2 x S6 + M2 */
-    #pragma omp task untied depend(inout:T1sMULT) depend(in:S2, S6)
+    #pragma omp task untied depend(inout:T1sMULT[:QuadrantSize*QuadrantSize]) \
+      depend(in:S2[:QuadrantSize*QuadrantSize], S6[:QuadrantSize*QuadrantSize])
     OptimizedStrassenMultiply_par(T1sMULT, S2, S6,  QuadrantSize, QuadrantSize, QuadrantSize, QuadrantSize, Depth+1);
 
     /* Step 1 of T2 = T1 + S3 x S7 */
-    #pragma omp task untied depend(inout:C22) depend(in:S3, S7)
+    #pragma omp task untied depend(inout:C22[:QuadrantSize*QuadrantSize]) \
+      depend(in:S3[:QuadrantSize*QuadrantSize], S7[:QuadrantSize*QuadrantSize])
     OptimizedStrassenMultiply_par(C22, S3, S7, QuadrantSize, RowWidthC /*FIXME*/, QuadrantSize, QuadrantSize, Depth+1);
 
     /* Step 1 of C11 = M2 + A12 * B21 */
-    #pragma omp task untied depend(inout:C11) depend(in:A12, B21)
+    #pragma omp task untied depend(inout:C11[:QuadrantSize*QuadrantSize]) \
+      depend(in:A12[:QuadrantSize*QuadrantSize], B21[:QuadrantSize*QuadrantSize])
     OptimizedStrassenMultiply_par(C11, A12, B21, QuadrantSize, RowWidthC, RowWidthA, RowWidthB, Depth+1);
     
     /* Step 1 of C12 = S4 x B22 + T1 + M5 */
-    #pragma omp task untied depend(inout:C12) depend(in:S4, B22)
+    #pragma omp task untied depend(inout:C12[:QuadrantSize*QuadrantSize]) \
+      depend(in:S4[:QuadrantSize*QuadrantSize], B22[:QuadrantSize*QuadrantSize])
     OptimizedStrassenMultiply_par(C12, S4, B22, QuadrantSize, RowWidthC, QuadrantSize, RowWidthB, Depth+1);
 
     /* Step 1 of C21 = T2 - A22 * S8 */
-    #pragma omp task untied depend(inout:C21) depend(in:A22, S8)
+    #pragma omp task untied depend(inout:C21[:QuadrantSize*QuadrantSize]) \
+      depend(in:A22[:QuadrantSize*QuadrantSize], S8[:QuadrantSize*QuadrantSize])
     OptimizedStrassenMultiply_par(C21, A22, S8, QuadrantSize, RowWidthC, RowWidthA, QuadrantSize, Depth+1);
   }
 
@@ -1270,7 +1277,7 @@ void strassen_main_par(REAL *A, REAL *B, REAL *C, int n)
 	bots_message("Computing parallel Strassen algorithm (n=%d) ", n);
 	#pragma omp parallel
 	#pragma omp single
-	#pragma omp task untied depend(inout:C) depend(in:A, B)
+	#pragma omp task untied depend(inout:C[:n*n]) depend(in:A[:n*n], B[:n*n])
 		OptimizedStrassenMultiply_par(C, A, B, n, n, n, n, 1);
 	bots_message(" completed!\n");
 }
