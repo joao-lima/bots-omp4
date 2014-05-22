@@ -97,7 +97,8 @@ long long fib (int n, int d)
 long long fib (int n)
 {
 	long long x, y;
-	if (n < 2) return n;
+	
+	if (n < 2) return (long long)n;
 
   #pragma omp taskgroup
   {
