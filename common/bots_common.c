@@ -26,6 +26,7 @@
 #include <sys/time.h>
 #include <sys/utsname.h>
 #include <sys/resource.h>
+#include <inttypes.h>
 
 #include "bots_common.h"
 #include "bots_main.h"
@@ -163,8 +164,8 @@ void bots_print_results()
          break;
    }
    sprintf(str_time_program, "%f", bots_time_program);
-   sprintf(str_time_start, "%ld", bots_time_start);
-   sprintf(str_time_end, "%ld", bots_time_end);
+   sprintf(str_time_start, "%" PRIu64, bots_time_start);
+   sprintf(str_time_end, "%" PRIu64, bots_time_end);
    if (bots_sequential_flag) sprintf(str_time_sequential, "%f", bots_time_sequential);
    else sprintf(str_time_sequential, "n/a");
    if (bots_sequential_flag)
