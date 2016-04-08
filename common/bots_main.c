@@ -479,8 +479,8 @@ int
 main(int argc, char* argv[])
 {
 #ifndef BOTS_APP_SELF_TIMING
-   long bots_t_start;
-   long bots_t_end;
+   unsigned long bots_t_start;
+   unsigned long bots_t_end;
 #endif
 
    bots_get_params(argc,argv);

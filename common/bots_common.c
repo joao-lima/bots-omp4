@@ -76,7 +76,7 @@ bots_warning(int warning, char *message)
    else fprintf(stderr, "Warning (%d): %s\n",warning,message);
 }
 
-long bots_usecs (void)
+unsigned long bots_usecs (void)
 {
    struct timeval t;
    gettimeofday(&t,NULL);
