@@ -47,6 +47,8 @@ extern char bots_ldflags[];
 /* time variables */
 extern double bots_time_program;
 extern double bots_time_sequential;
+extern long bots_time_start;
+extern long bots_time_end;
 
 /* number of tasks variable */
 extern unsigned long long bots_number_of_tasks; /* forcing 8 bytes size on -m32 and -m64 */

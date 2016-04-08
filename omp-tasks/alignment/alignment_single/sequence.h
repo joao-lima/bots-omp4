@@ -24,7 +24,7 @@
 #ifndef SEQUENCE_H
 #define SEQUENCE_H
 
-size_t strlcpy(char *dst, const char *src, size_t size);
+size_t strlcpy_(char *dst, const char *src, size_t size);
 void fill_chartab(char *chartab);
 void encode(char *seq, char *naseq, int l);
 void alloc_aln(int nseqs);

@@ -120,6 +120,8 @@ void bots_print_results()
    char str_resources[BOTS_TMP_STR_SZ];
    char str_result[15];
    char str_time_program[15];
+   char str_time_start[20];
+   char str_time_end[20];
    char str_time_sequential[15];
    char str_speed_up[15];
    char str_number_of_tasks[15];
@@ -161,6 +163,8 @@ void bots_print_results()
          break;
    }
    sprintf(str_time_program, "%f", bots_time_program);
+   sprintf(str_time_start, "%ld", bots_time_start);
+   sprintf(str_time_end, "%ld", bots_time_end);
    if (bots_sequential_flag) sprintf(str_time_sequential, "%f", bots_time_sequential);
    else sprintf(str_time_sequential, "n/a");
    if (bots_sequential_flag)
@@ -192,7 +196,7 @@ void bots_print_results()
          case 2:
 fprintf(stdout,
 "Benchmark;Parameters;Model;Cutoff;Resources;Result;\
-Time;Sequential;Speed-up;\
+Time;Begin;End;Sequential;Speed-up;\
 Nodes;Nodes/Sec;\
 Exec Date;Exec Time;Exec Message;\
 Architecture;Processors;Load Avg-1;Load Avg-5;Load Avg-15;\
@@ -203,7 +207,7 @@ Comp Date;Comp Time;Comp Message;CC;CFLAGS;LD;LDFLAGS\n");
          case 4:
 fprintf(stdout,
 "Benchmark;Parameters;Model;Cutoff;Resources;Result;\
-Time;Sequential;Speed-up;\
+Time;Begin;End;Sequential;Speed-up;\
 Nodes;Nodes/Sec;\n");
             break;
          default:
@@ -226,6 +230,8 @@ Nodes;Nodes/Sec;\n");
          fprintf(stdout, "Verification        = %s\n", str_result);
 
          fprintf(stdout, "Time Program        = %s seconds\n", str_time_program);
+         fprintf(stdout, "Time Begin          = %s useconds\n", str_time_start);
+         fprintf(stdout, "Time End            = %s useconds\n", str_time_end);
 	 if (bots_sequential_flag) {
            fprintf(stdout, "Time Sequential     = %s seconds\n", str_time_sequential);
            fprintf(stdout, "Speed-up            = %s\n", str_speed_up);
@@ -260,8 +266,10 @@ Nodes;Nodes/Sec;\n");
               str_resources, 
               str_result
          );
-         fprintf(stdout,"%s;%s;%s;", 
+         fprintf(stdout,"%s;%s;%s;%s;%s;", 
               str_time_program, 
+              str_time_start, 
+              str_time_end, 
               str_time_sequential, 
               str_speed_up 
          );
@@ -299,6 +307,8 @@ Nodes;Nodes/Sec;\n");
          fprintf(stdout, "Verification        = %s\n", str_result);
 
          fprintf(stdout, "Time Program        = %s seconds\n", str_time_program);
+         fprintf(stdout, "Time Begin          = %s useconds\n", str_time_start);
+         fprintf(stdout, "Time End            = %s useconds\n", str_time_end);
 	 if (bots_sequential_flag) {
            fprintf(stdout, "Time Sequential     = %s seconds\n", str_time_sequential);
            fprintf(stdout, "Speed-up            = %s\n", str_speed_up);
@@ -318,8 +328,10 @@ Nodes;Nodes/Sec;\n");
               str_resources, 
               str_result
          );
-         fprintf(stdout,"%s;%s;%s;", 
+         fprintf(stdout,"%s;%s;%s;%s;%s;", 
               str_time_program, 
+              str_time_start, 
+              str_time_end, 
               str_time_sequential, 
               str_speed_up 
          );

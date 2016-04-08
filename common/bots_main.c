@@ -65,6 +65,8 @@ char bots_cutoff[BOTS_TMP_STR_SZ];
 double bots_time_program = 0.0;
 double bots_time_sequential = 0.0;
 unsigned long long bots_number_of_tasks = 0; /* forcing 8 bytes size in -m32 and -m64 */
+long bots_time_start = 0;
+long bots_time_end = 0;
 
 /*
  * Application dependent info
@@ -514,6 +516,8 @@ main(int argc, char* argv[])
    KERNEL_CALL;
    bots_t_end = bots_usecs();
    bots_time_program = ((double)(bots_t_end-bots_t_start))/1000000;
+   bots_time_start = bots_t_start;
+   bots_time_end = bots_t_end;
 #endif
    KERNEL_FINI;
 
