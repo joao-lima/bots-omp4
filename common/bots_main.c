@@ -65,8 +65,8 @@ char bots_cutoff[BOTS_TMP_STR_SZ];
 double bots_time_program = 0.0;
 double bots_time_sequential = 0.0;
 unsigned long long bots_number_of_tasks = 0; /* forcing 8 bytes size in -m32 and -m64 */
-uint64_t bots_time_start = 0;
-uint64_t bots_time_end = 0;
+unsigned long long bots_time_start = 0;
+unsigned long long  bots_time_end = 0;
 
 /*
  * Application dependent info
